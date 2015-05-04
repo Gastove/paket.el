@@ -55,3 +55,5 @@
 (define-derived-mode paket-mode fundamental-mode
   (setq font-lock-defaults '(dependencies-keywords))
   (setq mode-name "Paket"))
+
+(add-to-list 'auto-mode-alist '("paket.dependencies" . paket-mode))
