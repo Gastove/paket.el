@@ -83,7 +83,8 @@
 (defun paket--remove-overlays () (remove-overlays))
 
 (defvar dependencies-keywords
-  '(("nuget \\|source \\|github " . font-lock-type-face)))
+  '(("nuget \\|source \\|github " . font-lock-keyword-face)
+    (".*\s.*\s\\(.*\\)" (1 font-lock-string-face))))
 
 (defvar paket-mode-map
   (let ((map (make-sparse-keymap)))
