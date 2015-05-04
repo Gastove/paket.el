@@ -83,13 +83,13 @@
 (defun paket--remove-overlays () (remove-overlays))
 
 (defvar dependencies-keywords
-      '(("nuget \\|source \\|github " . font-lock-type-face)))
+  '(("nuget \\|source \\|github " . font-lock-type-face)))
 
 (defvar paket-mode-map
   (let ((map (make-sparse-keymap)))
     (define-key map "\C-c\C-i" 'paket-install)
     (define-key map "\C-c\C-a" 'paket-add-nuget)
-    (define-key-map "\C-c\C-o" 'paket-outdated)
+    (define-key map "\C-c\C-o" 'paket-outdated)
     map))
 
 (define-derived-mode paket-mode prog-mode
