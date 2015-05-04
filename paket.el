@@ -43,8 +43,13 @@
   (interactive)
   (paket--send-command "install"))
 
+(defun paket-restore ()
+  "Restore packages with Paket."
+  (interactive)
+  (paket--send-command "restore"))
+
 (defun paket-add-nuget (package)
-  "Add a Nuget package with Paket."
+  "Add a Nuget PACKAGE with Paket."
   (interactive
    (list
     (read-string "Package name:")))
@@ -54,6 +59,11 @@
   "Check for outdated packages with Paket."
   (interactive)
   (paket--send-command "outdated"))
+
+(defun paket-update ()
+  "Update packages with Paket."
+  (interactive)
+  (paket--send-command "update"))
 
 (defun paket--prepare-command (command)
   (let ((paket-command (concat paket-program-name " " command)))
@@ -95,6 +105,8 @@
     (define-key map "\C-c\C-i" 'paket-install)
     (define-key map "\C-c\C-a" 'paket-add-nuget)
     (define-key map "\C-c\C-o" 'paket-outdated)
+    (define-key map "\C-c\C-r" 'paket-restore)
+    (define-key map "\C-c\C-u" 'paket-update)
     map))
 
 (define-derived-mode paket-mode prog-mode
