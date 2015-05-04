@@ -39,29 +39,33 @@
   "Paket buffer mode.")
 
 (defun paket-install ()
+  "Install packages with Paket."
   (interactive)
-  (paket--send-command "paket install"))
+  (paket--send-command "install"))
 
 (defun paket-add-nuget (package)
+  "Add a Nuget package with Paket."
   (interactive
    (list
     (read-string "Package name:")))
-  (paket--send-command (concat "paket add nuget " package)))
+  (paket--send-command (concat "add nuget " package)))
 
 (defun paket-outdated ()
+  "Check for outdated packages with Paket."
   (interactive)
-  (paket--send-command "paket outdated"))
+  (paket--send-command "outdated"))
 
-(defun paket--add-switches (command)
-  (if paket-hard-by-default
-      (concat command " --hard")
-    command))
+(defun paket--prepare-command (command)
+  (let ((paket-command (concat paket-program-name " " command)))
+    (if paket-hard-by-default
+        (concat paket-command " --hard")
+      paket-command)))
 
 (defun paket--send-command (command)
   (let ((default-directory (paket--find-root)))
     (if default-directory
         (with-current-buffer
-            (compilation-start (paket--add-switches command)
+            (compilation-start (paket--prepare-command command)
                                nil
                                (lambda (x) paket-buffer-name)))
       (message "Unable to find paket.dependencies"))))
