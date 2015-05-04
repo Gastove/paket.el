@@ -12,9 +12,9 @@ For the moment, the only way to install paket.el is by 'require'ing it:
 (require 'paket)
 ```
 
-### Usage
+## Usage
 
-## paket.dependencies
+### paket.dependencies
 
 A paket.dependencies buffer supports the following commands:
 
