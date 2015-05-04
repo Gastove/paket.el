@@ -9,8 +9,12 @@
   "The buffer for Paket results")
 
 (defcustom paket-program-name "paket"
-  "The shell command for PAket"
+  "The shell command for Paket"
   :type 'string)
+
+(defcustom paket-hard-by-default t
+  "Whether to add the --hard switch to commands"
+  :type 'boolean)
 
 (defun paket-find-root ()
   (locate-dominating-file
@@ -21,16 +25,23 @@
 (define-compilation-mode paket-buffer-mode "Paket"
   "Paket buffer mode.")
 
+(defun add-switches (command)
+  (if paket-hard-by-default
+      (concat command " --hard")
+    command))
+
 (defun paket-send-command (command)
   (let ((default-directory (paket-find-root)))
-    (with-current-buffer
-        (compilation-start command
-                           nil
-                           (lambda (x) paket-buffer-name)))))
+    (if default-directory
+        (with-current-buffer
+            (compilation-start (add-switches command)
+                               nil
+                               (lambda (x) paket-buffer-name)))
+      (message "Unable to find paket.dependencies"))))
 
 (defun paket-install ()
   (interactive)
-  (paket-send-command "paket install --hard"))
+  (paket-send-command "paket install"))
 
 (defun paket-add-nuget (package)
   (interactive
@@ -38,9 +49,9 @@
     (read-string "Package name:")))
   (paket-send-command (concat "paket add nuget " package)))
 
+(setq dependencies-keywords
+      '(("nuget \\|source " . font-lock-type-face)))
 
-
-(define-minor-mode paket-mode
-  "Mode for interacting with Paket."
-  :group 'paket
-  :lighter " paket")
+(define-derived-mode paket-mode fundamental-mode
+  (setq font-lock-defaults '(dependencies-keywords))
+  (setq mode-name "Paket"))
