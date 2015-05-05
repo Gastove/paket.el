@@ -20,6 +20,7 @@ For the moment, the only way to install paket.el is by 'require'ing it:
 | <code>paket-add-nuget</code>| Asks for the package name in the minibuffer and runs _package add nuget PACKAGE_ |
 | <code>paket-outdated</code>| Runs _paket outdated_ |
 | <code>paket-restore</code>| Runs _paket restore_ |
+| <code>paket-remove</code>| Runs _paket remove_. Will use the package on the current line, if paket.dependencies is open.
 | <code>paket-update</code>| Runs _paket update_ |
 
 ### paket.dependencies
@@ -31,5 +32,6 @@ A paket.dependencies buffer supports the following commands:
 |<kbd>C-c C-i</kbd>| paket-install |
 |<kbd>C-c C-a</kbd>| paket-add-nuget |
 |<kbd>C-c C-o</kbd>| paket-outdated |
-|<kbd>C-c C-r</kbd>| paket-restore |
+|<kbd>C-c C-r r</kbd>| paket-restore |
+|<kbd>C-c C-r m</kbd>| paket-remove |
 |<kbd>C-c C-u</kbd>| paket-upate |

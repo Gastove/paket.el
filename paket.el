@@ -65,7 +65,20 @@
   (interactive)
   (paket--send-command "update"))
 
+(defun paket-remove ()
+  "Remove package with Paket."
+  (interactive)
+  (let ((package (get-package-at-line)))
+    (paket--send-command (concat "remove " package))))
+
 (setq package-cache ())
+
+(defvar nuget-line-regex "\\(nuget\s.*?\\)[\s\n]")
+
+(defun get-package-at-line ()
+  (let ((line (thing-at-point 'line)))
+    (string-match nuget-line-regex line)
+    (match-string 1 line)))
 
 (defun find-packages-filter (proc str)
   (let ((split (split-string str "\n"))
@@ -123,11 +136,12 @@
 
 (defvar paket-mode-map
   (let ((map (make-sparse-keymap)))
-    (define-key map "\C-c\C-i" 'paket-install)
-    (define-key map "\C-c\C-a" 'paket-add-nuget)
-    (define-key map "\C-c\C-o" 'paket-outdated)
-    (define-key map "\C-c\C-r" 'paket-restore)
-    (define-key map "\C-c\C-u" 'paket-update)
+    (define-key map (kbd "C-c C-i") 'paket-install)
+    (define-key map (kbd "C-c C-a") 'paket-add-nuget)
+    (define-key map (kbd "C-c C-o") 'paket-outdated)
+    (define-key map (kbd "C-c C-r r") 'paket-restore)
+    (define-key map (kbd "C-c C-u") 'paket-update)
+    (define-key map (kbd "C-c C-r m") 'paket-remove)
     map))
 
 (define-derived-mode paket-mode prog-mode
