@@ -52,7 +52,7 @@
   "Add a Nuget PACKAGE with Paket."
   (interactive
    (list
-    (read-string "Package name:")))
+    (ido-completing-read "Package name:" package-cache)))
   (paket--send-command (concat "add nuget " package)))
 
 (defun paket-outdated ()
@@ -64,6 +64,27 @@
   "Update packages with Paket."
   (interactive)
   (paket--send-command "update"))
+
+(setq package-cache ())
+
+(defun find-packages-filter (proc str)
+  (let ((split (split-string str "\n"))
+        (old-result package-cache))
+    (setq package-cache (append split old-result))))
+
+(defun paket--find-packages-filter ()
+  (set-process-filter (get-process "paket")
+                      (lambda (proc str)
+                        (let ((split (split-string str "\n"))
+                              (old-result package-cache))
+                          (setq package-cache (append split old-result))))))
+
+(defun paket--start-package-process ()
+  (start-process "paket" "*paket-package-results*" "paket" "find-packages" "-s" "max" "100000"))
+
+(paket--start-package-process)
+(paket--find-packages-filter)
+(process-send-string "paket" "\n")
 
 (defun paket--prepare-command (command)
   (let ((paket-command (concat paket-program-name " " command)))
