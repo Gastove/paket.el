@@ -30,7 +30,7 @@
   :group 'paket
   :type 'string)
 
-(defcustom paket-hard-by-default t
+(defcustom paket-hard-by-default nil
   "Whether to add the --hard switch to commands."
   :group 'paket
   :type 'boolean)
