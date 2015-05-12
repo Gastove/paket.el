@@ -19,6 +19,10 @@
                                (lambda (x) paket-buffer-name)))
       (message "Unable to find paket.dependencies"))))
 
+(defun paket--revert-buffer ()
+  (with-current-buffer
+      (revert-buffer t t)))
+
 (defun paket-install ()
   "Install packages with Paket."
   (interactive)
@@ -42,7 +46,10 @@
 (defun paket-remove ()
   "Remove package with Paket."
   (interactive)
-  (let ((package (get-package-at-line)))
-    (paket--send-command (concat "remove " package))))
+  (let* ((package (get-package-at-line))
+         (confirm (read-string (concat "Remove " package "? (y) "))))
+    (if (string-match confirm "y")
+        (paket--send-command (concat "remove " package))))
+  (paket--revert-buffer))
 
 (provide 'paket-commands)
