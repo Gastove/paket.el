@@ -35,43 +35,16 @@
   :group 'paket
   :type 'boolean)
 
+(defcustom paket-cache-packages-on-load t
+  "Whether to load and cache packages on load"
+  :group 'paket
+  :type 'boolean)
+
+(require 'paket-commands)
+(require 'paket-add)
+
 (define-compilation-mode paket-buffer-mode "Paket"
   "Paket buffer mode.")
-
-(defun paket-install ()
-  "Install packages with Paket."
-  (interactive)
-  (paket--send-command "install"))
-
-(defun paket-restore ()
-  "Restore packages with Paket."
-  (interactive)
-  (paket--send-command "restore"))
-
-(defun paket-add-nuget (package)
-  "Add a Nuget PACKAGE with Paket."
-  (interactive
-   (list
-    (ido-completing-read "Package name:" package-cache)))
-  (paket--send-command (concat "add nuget " package)))
-
-(defun paket-outdated ()
-  "Check for outdated packages with Paket."
-  (interactive)
-  (paket--send-command "outdated"))
-
-(defun paket-update ()
-  "Update packages with Paket."
-  (interactive)
-  (paket--send-command "update"))
-
-(defun paket-remove ()
-  "Remove package with Paket."
-  (interactive)
-  (let ((package (get-package-at-line)))
-    (paket--send-command (concat "remove " package))))
-
-(setq package-cache ())
 
 (defvar nuget-line-regex "\\(nuget\s.*?\\)[\s\n]")
 
@@ -79,46 +52,6 @@
   (let ((line (thing-at-point 'line)))
     (string-match nuget-line-regex line)
     (match-string 1 line)))
-
-(defun find-packages-filter (proc str)
-  (let ((split (split-string str "\n"))
-        (old-result package-cache))
-    (setq package-cache (append split old-result))))
-
-(defun paket--find-packages-filter ()
-  (set-process-filter (get-process "paket")
-                      (lambda (proc str)
-                        (let ((split (split-string str "\n"))
-                              (old-result package-cache))
-                          (setq package-cache (append split old-result))))))
-
-(defun paket--start-package-process ()
-  (start-process "paket" "*paket-package-results*" "paket" "find-packages" "-s" "max" "100000"))
-
-(paket--start-package-process)
-(paket--find-packages-filter)
-(process-send-string "paket" "\n")
-
-(defun paket--prepare-command (command)
-  (let ((paket-command (concat paket-program-name " " command)))
-    (if paket-hard-by-default
-        (concat paket-command " --hard")
-      paket-command)))
-
-(defun paket--send-command (command)
-  (let ((default-directory (paket--find-root)))
-    (if default-directory
-        (with-current-buffer
-            (compilation-start (paket--prepare-command command)
-                               nil
-                               (lambda (x) paket-buffer-name)))
-      (message "Unable to find paket.dependencies"))))
-
-(defun paket--find-root ()
-  (locate-dominating-file
-   (file-name-as-directory
-    (file-name-directory buffer-file-name))
-   "paket.dependencies"))
 
 (defun paket--overlay-new-version (version)
   (overlay-put
@@ -152,7 +85,16 @@
   (use-local-map paket-mode-map)
 
   (setq font-lock-defaults '(dependencies-keywords))
-  (setq mode-name "Paket"))
+  (setq mode-name "Paket")
+
+  (run-with-idle-timer
+   0
+   nil
+   (lambda ()
+     (if paket-cache-packages-on-load
+         (progn
+           (setq package-list (paket--fetch-packages ""))
+           (setq cache-loaded t))))))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("paket.dependencies" . paket-mode))
