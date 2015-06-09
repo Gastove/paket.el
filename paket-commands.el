@@ -11,6 +11,7 @@
       paket-command)))
 
 (defun paket--send-command (command)
+  (paket-bootstrap--ensure)
   (let ((default-directory (paket--find-root)))
     (if default-directory
         (with-current-buffer

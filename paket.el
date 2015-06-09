@@ -8,9 +8,9 @@
 ;; Package-Requires: ((emacs "24")
 ;; Keywords: paket
 
-
 ;;; Commentary:
-;;
+
+;; Paket tooling for Emacs
 
 ;;; Code:
 
@@ -40,6 +40,7 @@
   :group 'paket
   :type 'boolean)
 
+(require 'paket-bootstrap)
 (require 'paket-commands)
 (require 'paket-add)
 
