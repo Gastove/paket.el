@@ -86,16 +86,7 @@
   (use-local-map paket-mode-map)
 
   (setq font-lock-defaults '(dependencies-keywords))
-  (setq mode-name "Paket")
-
-  (run-with-idle-timer
-   0
-   nil
-   (lambda ()
-     (if paket-cache-packages-on-load
-         (progn
-           (setq package-list (paket--fetch-packages ""))
-           (setq cache-loaded t))))))
+  (setq mode-name "Paket"))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("paket.dependencies" . paket-mode))
