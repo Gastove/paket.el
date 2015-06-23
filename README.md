@@ -1,6 +1,8 @@
 # paket.el
 [Paket](http://fsprojects.github.io/Paket/) tooling for Emacs.  Only for the brave; very much WIP.
 
+![paket-add-nuget](demos/paket-add-nuget.gif)
+
 ## Installation
 
 ### Manual
