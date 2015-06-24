@@ -1,13 +1,6 @@
 (defvar paket-bootstrap-executable "paket.bootstrapper.exe")
 
-(defvar paket-executable "paket.exe")
-
 (defvar paket-bootstrap-complete nil)
-
-(defun paket-find-executable (executable)
-  (or (executable-find executable)
-      (concat (file-name-directory (or load-file-name buffer-file-name))
-              executable)))
 
 (defvar paket-bootstrap-command
   (paket-find-executable paket-bootstrap-executable))

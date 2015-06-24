@@ -5,7 +5,7 @@
    "paket.dependencies"))
 
 (defun paket--prepare-command (command)
-  (let ((paket-command (concat paket-program-name " " command)))
+  (let ((paket-command (concat (paket-find-executable paket-executable) " " command)))
     (if paket-hard-by-default
         (concat paket-command " --hard")
       paket-command)))

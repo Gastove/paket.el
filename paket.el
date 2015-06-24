@@ -40,6 +40,11 @@
   :group 'paket
   :type 'boolean)
 
+(defvar paket-executable "paket.exe")
+
+(defun paket-find-executable (executable)
+  (locate-file executable load-path))
+
 (require 'paket-bootstrap)
 (require 'paket-commands)
 (require 'paket-add)
