@@ -48,6 +48,7 @@
 (require 'paket-bootstrap)
 (require 'paket-commands)
 (require 'paket-add)
+(require 'paket-remove)
 
 (define-compilation-mode paket-buffer-mode "Paket"
   "Paket buffer mode.")
@@ -80,7 +81,7 @@
     (define-key map (kbd "C-c C-o") 'paket-outdated)
     (define-key map (kbd "C-c C-r r") 'paket-restore)
     (define-key map (kbd "C-c C-u") 'paket-update)
-    (define-key map (kbd "C-c C-r m") 'paket-remove)
+    (define-key map (kbd "C-c C-r m") 'paket-remove-nuget)
     map))
 
 (define-derived-mode paket-mode prog-mode
