@@ -6,7 +6,7 @@
   (paket-find-executable paket-bootstrap-executable))
 
 (defun paket-executable-exists ()
-  (file-exists-p (paket-find-executable paket-executable)))
+  (paket-find-executable paket-executable))
 
 (defun paket-bootstrap--start-process ()
   (let ((process (start-file-process "bootstrapper" "paket-bootstrap" paket-bootstrap-command)))
