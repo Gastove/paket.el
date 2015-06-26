@@ -97,6 +97,16 @@
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("paket.dependencies" . paket-mode))
 
+(easy-menu-define paket-mode-menu paket-mode-map
+  "Paket mode menu."
+  '("Paket"
+    ["Add Nuget" paket-add-nuget]
+    ["Install" paket-install]
+    ["Outdated" paket-outdated]
+    ["Remove Nuget" paket-remove-nuget]
+    ["Restore" paket-restore]
+    ["Update" paket-update]))
+
 (provide 'paket)
 
 ;;; paket.el ends here
